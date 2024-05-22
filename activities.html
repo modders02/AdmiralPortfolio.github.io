@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/main.css">
 <title>Activities</title>
 <style>
 * {
@@ -39,9 +39,10 @@ body {
     flex-wrap: wrap;
 }
 .tab {
-    flex: 1 1 calc(100% / 3); /* Each tab takes up a third of the width */
+    flex: 1 1 calc(33.33% - 0.25rem); /* Each tab takes up a third of the width */
     display: flex;
     flex-direction: column;
+    margin: 0.125rem; /* Small margin between tabs */
 }
 .tab-switch {
     display: none;
@@ -97,8 +98,8 @@ a:hover {
 </head>
 <body>
 <div id="preloader" style="display: none;">
-        <div id="loader" style="display: none;"></div>
-    </div>
+    <div id="loader" style="display: none;"></div>
+</div>
 <div class="wrapper">
     <div class="header">Activities of semester</div>
     <div class="tabs">
@@ -163,6 +164,5 @@ a:hover {
         </div>
     </div>
 </div>
-
 </body>
 </html>
