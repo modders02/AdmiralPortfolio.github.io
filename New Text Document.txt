@@ -1,0 +1,254 @@
+package labExam1;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
+public class Monday extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTable tableStudents;
+	
+	private String[] header = {"ID", "LAST NAME", "FIRST NAME", "COURSE"};
+	private String[][] data = {{"1", " ", " ", " "},
+							   {"2", " ", " ", " "},
+							   {"3", " ", " ", " "}};
+	
+	private DefaultTableModel modelStudents = new DefaultTableModel(data, header) {
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+	
+	
+	private JTextField txtID;
+	private JTextField txtLastName;
+	private JLabel lblFirstName;
+	private JTextField txtFirstName;
+	private JLabel lblCourse;
+	private JTextField txtCourse;
+	private JButton btnDelete;
+	private JButton btnUpdate;
+	private JButton btnNew;
+	private JPanel panel;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Monday frame = new Monday();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Monday() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 532, 703);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		panel = new JPanel();
+		panel.setBounds(10, 28, 496, 587);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		panel.setVisible(false);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 5, 452, 427);
+		panel.add(scrollPane);
+		
+		tableStudents = new JTable();
+		tableStudents.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String id = (String) modelStudents.getValueAt(tableStudents.getSelectedRow(), 0);
+				String LName = (String) modelStudents.getValueAt(tableStudents.getSelectedRow(), 1);
+				String FName = (String) modelStudents.getValueAt(tableStudents.getSelectedRow(), 2);
+				String Course = (String) modelStudents.getValueAt(tableStudents.getSelectedRow(), 3);
+				txtID.setText(id);
+				txtFirstName.setText(FName);
+				txtLastName.setText(LName);
+				txtCourse.setText(Course);
+			}
+		});
+		tableStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableStudents.setModel(modelStudents);
+		scrollPane.setViewportView(tableStudents);
+		
+		txtID = new JTextField();
+		txtID.setBounds(92, 443, 86, 20);
+		txtID.setColumns(10);
+		
+		JLabel lblID = new JLabel("ID:");
+		lblID.setBounds(27, 443, 15, 14);
+		
+		JLabel lblLastName = new JLabel("Last Name:");
+		lblLastName.setBounds(27, 478, 54, 14);
+		
+		txtLastName = new JTextField();
+		txtLastName.setColumns(10);
+		txtLastName.setBounds(92, 475, 86, 20);
+		
+		lblFirstName = new JLabel("First Name:");
+		lblFirstName.setBounds(27, 513, 55, 14);
+		
+		txtFirstName = new JTextField();
+		txtFirstName.setColumns(10);
+		txtFirstName.setBounds(92, 510, 86, 20);
+		
+		lblCourse = new JLabel("Course:");
+		lblCourse.setBounds(27, 547, 38, 14);
+		
+		txtCourse = new JTextField();
+		txtCourse.setColumns(10);
+		txtCourse.setBounds(92, 544, 86, 20);
+		
+		JButton btnAdd = new JButton("ADD");
+		btnAdd.setEnabled(false);
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String ID = txtID.getText();
+				String fName = txtFirstName.getText();
+				String lName = txtLastName.getText();
+				String course = txtCourse.getText();
+				
+				Object[] data = {ID, fName, lName, course};
+//				Object[] data2 = new Object[4];
+//				data2[0] = ID;
+//				data2[1] = fName;
+//				data2[2] = lName;
+//				data2[3] = course;
+				modelStudents.addRow(data);
+				
+				txtID.setText(null);
+				txtFirstName.setText(null);
+				txtLastName.setText(null);
+				txtCourse.setText(null);
+				btnAdd.setEnabled(false);
+			}
+		});
+		btnAdd.setBounds(340, 443, 98, 23);
+		
+		btnDelete = new JButton("DELETE");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelStudents.removeRow(tableStudents.getSelectedRow());
+
+				txtID.setText(null);
+				txtFirstName.setText(null);
+				txtLastName.setText(null);
+				txtCourse.setText(null);
+			}
+		});
+		btnDelete.setBounds(232, 493, 98, 23);
+		
+		btnUpdate = new JButton("UPDATE");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = tableStudents.getSelectedRow();
+				modelStudents.setValueAt(txtID.getText(), selectedRow, 0);
+				modelStudents.setValueAt(txtLastName.getText(), selectedRow, 1);
+				modelStudents.setValueAt(txtFirstName.getText(), selectedRow, 2);
+				modelStudents.setValueAt(txtCourse.getText(), selectedRow, 3);
+
+				txtID.setText(null);
+				txtFirstName.setText(null);
+				txtLastName.setText(null);
+				txtCourse.setText(null);
+			}
+		});
+		btnUpdate.setBounds(340, 493, 98, 23);
+		
+		btnNew = new JButton("NEW");
+		btnNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAdd.setEnabled(true);
+				txtID.setText(null);
+				txtFirstName.setText(null);
+				txtLastName.setText(null);
+				txtCourse.setText(null);
+			}
+		});
+		btnNew.setBounds(232, 443, 98, 23);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 516, 22);
+		contentPane.add(menuBar);
+		
+		JMenu mnAccount = new JMenu("ACCOUNT");
+		menuBar.add(mnAccount);
+		
+		JMenuItem mntmLogIn = new JMenuItem("LOG IN");
+		mnAccount.add(mntmLogIn);
+		
+		JMenuItem mntmLogOut = new JMenuItem("LOG OUT");
+		mntmLogOut.setEnabled(false);
+		mnAccount.add(mntmLogOut);
+		
+
+		mntmLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String pass = JOptionPane.showInputDialog(null, "Enter password: ");
+				if (pass.equals("12345")) {
+					mntmLogIn.setEnabled(false);
+					mntmLogOut.setEnabled(true);
+					panel.setVisible(true);
+				}
+			}
+		});
+
+		mntmLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmLogIn.setEnabled(true);
+				mntmLogOut.setEnabled(false);
+				panel.setVisible(false);
+			}
+		});
+		
+		panel.add(lblID);
+		panel.add(lblFirstName);
+		panel.add(lblLastName);
+		panel.add(lblCourse);
+		panel.add(txtID);
+		panel.add(txtFirstName);
+		panel.add(txtLastName);
+		panel.add(txtCourse);
+		panel.add(btnNew);
+		panel.add(btnAdd);
+		panel.add(btnDelete);
+		panel.add(btnUpdate);
+	}
+}
